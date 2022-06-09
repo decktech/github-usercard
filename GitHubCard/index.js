@@ -8,11 +8,12 @@ import axios from 'axios';
 
 axios.get(`https://api.github.com/users/decktech`)
   .then(res => {
-    debugger
-    document.querySelector('.cards').appendChild(gitCard(res.data))
+    document.querySelector('.cards').appendChild(gitCard(res.data));
   })
-  .catch(err => console.err(err))
+  .catch(err => console.error(err));
 
+
+console.log(axios.get(`https://api.github.com/users/decktech`))
 
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
@@ -40,8 +41,22 @@ axios.get(`https://api.github.com/users/decktech`)
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = [
+  'tetondan',
+  'dustinmyers',
+  'justsml',
+  'luishrd',
+  'bigknell'
+];
 
+followersArray.forEach(follower => {
+  axios.get(`https://api.github.com/users/${follower}`)
+  .then(res => {
+    document.querySelector('.cards').appendChild(gitCard(res.data));
+  })
+  .catch(err => console.error(err));
+
+})
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
     Using DOM methods and properties, create and return the following markup:
@@ -70,10 +85,25 @@ function gitCard(obj) {
   const userName = document.createElement('p');
   const location = document.createElement('p');
   const profile = document.createElement('p');
-  const href = document.createElement('a');
+  const link = document.createElement('a');
   const followers = document.createElement('p');
   const following = document.createElement('p');
   const bio = document.createElement('p');
+
+  card.classList.add('card');
+  image.src = obj.avatar_url;
+  info.classList.add('card-info');
+  name.classList.add('name');
+  name.textContent = obj.name;
+  userName.classList.add('username');
+  userName.textContent = obj.login;
+  location.textContent = `Location: ${obj.location}`;
+  profile.textContent = 'Profile: ';
+  link.href = obj.html_url;
+  link.textContent = obj.html_url;
+  followers.textContent = `Followers: ${obj.followers}`;
+  following.textContent = `Following: ${obj.following}`;
+  bio.textContent = `Bio: ${obj.following}`;
 
   card.appendChild(image);
   card.appendChild(info);
@@ -81,28 +111,12 @@ function gitCard(obj) {
   info.appendChild(userName);
   info.appendChild(location);
   info.appendChild(profile);
-  profile.appendChild(href);
+  profile.appendChild(link);
   info.appendChild(followers);
   info.appendChild(following);
   info.appendChild(bio);
 
-console.log(card);
-
-  // card.classList.add('card');
-  // image.src = obj.avatar_url;
-  // info.classList.add('card-info');
-  // name.classList.add('name');
-  // name.textContent = obj.name;
-  // userName.classList.add('username');
-  // userName.textContent = obj.login;
-  // location.textContent = `Location: ${obj.location}`;
-  // profile.textContent = `Profile: `;
-  // href.href = obj.html_url;
-  // href.textContent = obj.htm_url;
-  // followers.textContent = `Followers: ${obj.followers}`;
-  // following.textConent = `Following: ${obj.following}`;
-  // bio.textContent = `Bio: ${obj.following}`;
-
+  console.log(card)
   return card;
 }
 
